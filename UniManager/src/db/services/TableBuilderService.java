@@ -111,5 +111,23 @@ public class TableBuilderService extends DbService {
         }
 
     }
+    /**
+     * Drops every single table
+     *  */
+    public void dropAllTables() {
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+            // Drop tables in reverse order of creation
+            statement.executeUpdate("DROP TABLE IF EXISTS teaches");
+            statement.executeUpdate("DROP TABLE IF EXISTS enrollments");
+            statement.executeUpdate("DROP TABLE IF EXISTS courses");
+            statement.executeUpdate("DROP TABLE IF EXISTS professors");
+            statement.executeUpdate("DROP TABLE IF EXISTS departments");
+            statement.executeUpdate("DROP TABLE IF EXISTS students");
+
+            System.err.println("SUCCESS: All tables are dropped");
+        } catch (SQLException e) {
+            System.err.println("ERROR: Couldn't drop database tables - " + e.getMessage());
+        }
+    }
 
 }

@@ -20,6 +20,8 @@ public class MainFrame extends JFrame {
         ts = new TableBuilderService(dbInfo);
         ds = new DepartmentsService(dbInfo);
 
+        // Drop all tables
+        ts.dropAllTables();
         // Ensure that all db tables have been created
         ts.ensureTablesCreated();
 
