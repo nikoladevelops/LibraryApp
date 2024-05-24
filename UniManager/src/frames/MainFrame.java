@@ -1,49 +1,70 @@
 package frames;
 
-import db.services.*;
-import db.utility.DbInfo;
-import java.awt.Point;
-import java.sql.SQLException;
-import javax.swing.*;
+import helper.ControlHelper;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class MainFrame extends JFrame {
-    private TableBuilderService ts;
-    private DepartmentsService ds;
-
-    public MainFrame(DbInfo dbInfo) {
-        this.setTitle("LibraryApp");
-        this.setSize(500, 500);
+    public MainFrame(String frameTitle) {
+        this.setTitle(frameTitle);
+        this.setSize(700, 500);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
         this.setVisible(true);
+        this.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 150));
+        //this.setLayout(null);
+        
+        generateTitle();
+        generateBtns();
+        
+        this.pack();
+        this.setLocationRelativeTo(null);
 
-        ts = new TableBuilderService(dbInfo);
-        ds = new DepartmentsService(dbInfo);
+    }
 
-        // Drop all tables
-        ts.dropAllTables();
-        // Ensure that all db tables have been created
-        ts.ensureTablesCreated();
+    private void generateBtns(){
+        JPanel btnPanel = new JPanel();
+        btnPanel.setLayout(new GridLayout(4,1,0,5));
 
-        // Test whether a new department can be added
-        try {
-            ds.createDepartment("Test");
-            System.err.println("SUCCESS: Department created");
-        } catch (SQLException ex) {
-            System.err.println("ERROR couldnt create department!");
+        Map<JButton, CrudFrame> map = new HashMap<JButton,CrudFrame>();
+        map.put(new JButton("Students"), new StudentsFrame("Students"));
+        map.put(new JButton("Courses"), new CrudFrame("Courses"));
+        map.put(new JButton("Professors"), new ProfessorsFrame("Professors"));
+        map.put(new JButton("Departments"), new DepartmentsFrame("Departments"));
+        
+        for (Map.Entry<JButton, CrudFrame> entry : map.entrySet()) {
+            JButton btn = entry.getKey();
+            CrudFrame frame = entry.getValue();
+
+            btn.addActionListener(e->{
+                frame.setVisible(true);
+            });
+
+            Color normalBGColor = Color.white;
+            Color hoverBGColor = Color.black;
+
+            Color normalForeColor = Color.black;
+            Color hoverForeColo = Color.white;
+
+            ControlHelper.editButtonStyle(btn, new Dimension(250,40),17, normalBGColor, normalForeColor, Color.black);
+            ControlHelper.addHoverEffect(btn, normalBGColor, hoverBGColor, normalForeColor, hoverForeColo);
+            
+            btnPanel.add(btn);
         }
 
-        // Add a label to display data
-        JLabel label = new JLabel("Database Initialized");
-        //label.setSize(new Dimension(40,40));
-        label.setBounds(10, 10, 150, 25); // Set position and size
-        label.setVisible(true);
-        label.setLocation(new Point(10, 10));
-        this.add(label);
+        this.add(btnPanel, BorderLayout.CENTER);
+    }
 
-        //String name = DatabaseManager.getUserName();
-        //System.err.println(name);
-
-        //label.setText(name);
+    private void generateTitle() {
+        JLabel lbl = ControlHelper.generateLabel("Uni Manager", 22, Color.black);
+        this.add(lbl);
     }
 }

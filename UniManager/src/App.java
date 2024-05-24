@@ -11,7 +11,7 @@ public class App {
     public static void main(String[] args) throws Exception {
         dbInfo = new DbInfo(URL, USER, PASSWORD);
 
-        MainFrame mf = new MainFrame(dbInfo);
+        MainFrame mf = new MainFrame("Uni Manager");
 
     }
 }
