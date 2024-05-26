@@ -66,6 +66,28 @@ public class StudentsService extends DbService {
         return statement.executeQuery();
     }
 
+    public StudentModel getStudentByFacultyNumber(String searchFacultyNumber) throws SQLException {
+        String query = "SELECT * FROM students WHERE faculty_number = ?";
+
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, searchFacultyNumber);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int studentId = resultSet.getInt("student_id");
+                    String firstName = resultSet.getString("first_name");
+                    String middleName = resultSet.getString("middle_name");
+                    String lastName = resultSet.getString("last_name");
+                    String email = resultSet.getString("email");
+                    String facultyNumber = resultSet.getString("faculty_number");
+
+                    return new StudentModel(studentId, firstName, middleName, lastName, email, facultyNumber);
+                } else {
+                    throw new SQLException("No student found with faculty number: " + searchFacultyNumber);
+                }
+            }
+        }
+    }
+
     public void updateStudent(int studentId, String firstName, String middleName, String lastName, String email, String facultyNumber) throws SQLException {
         String query = "UPDATE students SET first_name = ?, middle_name = ?, last_name = ?, email = ?, faculty_number = ? WHERE student_id = ?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {

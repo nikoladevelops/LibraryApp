@@ -57,9 +57,6 @@ public class StudentsViewFrame extends ViewFrame {
     private JList<StudentModel> studentsList;
 
     public StudentsViewFrame(String frameTitle, DbInfo dbInfo) {
-        
-        // TODO SEARCHING
-
         super(frameTitle, dbInfo);
         cs = new CoursesService(dbInfo);
         es = new EnrollmentsService(dbInfo);
@@ -149,16 +146,24 @@ public class StudentsViewFrame extends ViewFrame {
     }
 
     public void searchBtnClicked(){
-        coursesListModel.clear();
-        List<CourseModel> allCourses = null;
-        try {
-            allCourses = cs.getCoursesWithName(searchPane.getText());
-        } catch (Exception e) {
-            System.err.println("Error: Courses with particular name couldn't be loaded");
+        if(searchPane.getText().isEmpty()){
+            refreshAll();
+            return;
         }
 
-        for (CourseModel course : allCourses) {
-            coursesListModel.addElement(course);
+        coursesListModel.clear();
+        studentsListModel.clear();
+
+        List<StudentModel> filteredStudents = new ArrayList<>();
+        try {
+            StudentModel st = ss.getStudentByFacultyNumber(searchPane.getText());
+            filteredStudents.add(st);
+        } catch (Exception e) {
+            System.err.println("Error: Student with particular faculty number couldn't be loaded");
+        }
+
+        for (StudentModel st : filteredStudents) {
+            studentsListModel.addElement(st);
         }
 
         this.repaint();
@@ -173,7 +178,7 @@ public class StudentsViewFrame extends ViewFrame {
         searchPane = new JTextPane();
         
         InputTextPaneInfo[] infos = {
-            new InputTextPaneInfo(searchPane, "Search by name")
+            new InputTextPaneInfo(searchPane, "Search by faculty number")
         };
         
         // Create search input panel
@@ -310,7 +315,7 @@ public class StudentsViewFrame extends ViewFrame {
         try {
             allStudents = ss.getAllStudents();
         } catch (Exception e) {
-            System.err.println("Error: Courses couldn't be loaded");
+            System.err.println("Error: Students couldn't be loaded");
         }
 
         for (StudentModel student : allStudents) {
