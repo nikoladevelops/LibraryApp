@@ -12,11 +12,12 @@ public class StudentsService extends DbService {
         super(dbInfo);
     }
 
-    public void createStudent(String name, String email) throws SQLException {
-        String query = "INSERT INTO students (name, email) VALUES (?, ?)";
+    public void createStudent(String name, String email, String facultyNumber) throws SQLException {
+        String query = "INSERT INTO students (name, email, facultyNumber) VALUES (?, ?, ?)";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, name);
             statement.setString(2, email);
+            statement.setString(3, facultyNumber);
             statement.executeUpdate();
         }
     }
@@ -29,12 +30,13 @@ public class StudentsService extends DbService {
         return statement.executeQuery();
     }
 
-    public void updateStudent(int studentId, String name, String email) throws SQLException {
-        String query = "UPDATE students SET name = ?, email = ? WHERE student_id = ?";
+    public void updateStudent(int studentId, String name, String email, String facultyNumber) throws SQLException {
+        String query = "UPDATE students SET name = ?, email = ?, facultyNumber = ? WHERE student_id = ?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, name);
             statement.setString(2, email);
-            statement.setInt(3, studentId);
+            statement.setString(3, facultyNumber);
+            statement.setInt(4, studentId);
             statement.executeUpdate();
         }
     }

@@ -1,15 +1,40 @@
 package db.services;
 
+import db.models.CourseModel;
 import db.utility.DbInfo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CoursesService extends DbService {
 
     public CoursesService(DbInfo dbInfo) {
         super(dbInfo);
+    }
+
+    public List<CourseModel> getAllCourses() throws SQLException{
+        String query = "SELECT * FROM courses";
+        List<CourseModel> result = new ArrayList<>();
+
+        try (Connection connection = getConnection(); 
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery()
+            ) {
+
+            while (resultSet.next()) {
+                int courseId = resultSet.getInt("course_id");
+                String courseName = resultSet.getString("course_name");
+                String description = resultSet.getString("description");
+                int departmentId = resultSet.getInt("department_id");
+
+                result.add(new CourseModel(courseId, courseName, description, departmentId));
+            }
+            
+            return result;
+        }
     }
 
     public void createCourse(String courseName, String description, int departmentId) throws SQLException {

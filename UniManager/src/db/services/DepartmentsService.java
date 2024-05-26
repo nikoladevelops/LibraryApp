@@ -1,15 +1,38 @@
 package db.services;
 
+import db.models.DepartmentModel;
 import db.utility.DbInfo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DepartmentsService extends DbService {
 
     public DepartmentsService(DbInfo dbInfo) {
         super(dbInfo);
+    }
+    
+    public List<DepartmentModel> getAllDepartments() throws SQLException{
+        String query = "SELECT * FROM departments";
+        List<DepartmentModel> result = new ArrayList<>();
+
+        try (Connection connection = getConnection(); 
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery()
+            ) {
+
+            while (resultSet.next()) {
+                int departmentId = resultSet.getInt("department_id");
+                String departmentName = resultSet.getString("department_name");
+
+                result.add(new DepartmentModel(departmentId, departmentName));
+            }
+            
+            return result;
+        }
     }
 
     public void createDepartment(String departmentName) throws SQLException {

@@ -31,6 +31,7 @@ public class TableBuilderService extends DbService {
             + "student_id INT AUTO_INCREMENT, "
             + "name VARCHAR(255), "
             + "email VARCHAR(255), "
+            + "faculty_number VARCHAR(255)"
             + "PRIMARY KEY(student_id)"
             + ")";
 
