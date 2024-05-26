@@ -10,6 +10,6 @@ public class CourseModel {
         this.courseId = courseId;
         this.courseName = courseName;
         this.description = description;
-        this.departmentId=departmentId;
+        this.departmentId = departmentId;
     }
 }

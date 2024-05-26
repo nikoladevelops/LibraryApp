@@ -51,7 +51,7 @@ public class MainFrame extends JFrame {
         map.put(new JButton("Students"), new StudentsFrame("Students",dbInfo));
         map.put(new JButton("Courses"), new ViewFrame("Courses",dbInfo));
         map.put(new JButton("Professors"), new ProfessorsFrame("Professors",dbInfo));
-        map.put(new JButton("Departments"), new DepartmentsViewFrame("Departments",dbInfo));
+        map.put(new JButton("Departments"), new CoursesViewFrame("Departments",dbInfo));
         
         for (Map.Entry<JButton, ViewFrame> entry : map.entrySet()) {
             JButton btn = entry.getKey();

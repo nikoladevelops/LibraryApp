@@ -1,5 +1,6 @@
-package frames.departments;
+package frames.courses;
 
+import db.models.CourseModel;
 import db.models.DepartmentModel;
 import db.services.CoursesService;
 import db.services.DepartmentsService;
@@ -15,7 +16,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -28,13 +28,13 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
-public class DepartmentsViewFrame extends ViewFrame {
+public class CoursesViewFrame extends ViewFrame {
 
     private final DepartmentsService ds;
+    private final CoursesService cs;
     private final EnrollmentsService es;
     private final TeachesService ts;
-    private final CoursesService cs;
-
+    
     private JButton createBtn;
     private JButton editBtn;
     private JButton deleteBtn;
@@ -42,17 +42,18 @@ public class DepartmentsViewFrame extends ViewFrame {
     private JTextPane searchPane;
 
     // Needed in order to clear and reset list items
-    private DefaultListModel<DepartmentModel> listModel;
+    private DefaultListModel<CourseModel> listModel;
 
     // Needed in order to know which thing is selected
-    private JList<DepartmentModel> list;
+    private JList<CourseModel> list;
 
-    public DepartmentsViewFrame(String frameTitle, DbInfo dbInfo) {
+    public CoursesViewFrame(String frameTitle, DbInfo dbInfo) {
         super(frameTitle, dbInfo);
         ds = new DepartmentsService(dbInfo);
+        cs = new CoursesService(dbInfo);
         es = new EnrollmentsService(dbInfo);
         ts = new TeachesService(dbInfo);
-        cs = new CoursesService(dbInfo);
+        
 
 
         this.getContentPane().setBackground(Color.gray);
@@ -78,7 +79,7 @@ public class DepartmentsViewFrame extends ViewFrame {
         panel.setMaximumSize(new Dimension(100,500));
         
         // Just a label
-        JLabel lbl = ControlHelper.generateLabel("All Departments", 15, Color.black);
+        JLabel lbl = ControlHelper.generateLabel("All Courses", 15, Color.black);
         lbl.setPreferredSize(new Dimension(100,30));
         lbl.setMaximumSize(new Dimension(100,30));
         lbl.setMinimumSize(new Dimension(100,30));
@@ -118,7 +119,7 @@ public class DepartmentsViewFrame extends ViewFrame {
 
     private void addBtnEvenets(){
         createBtn.addActionListener(e->{
-            new DepartmentsCreateFrame(ds, this::refreshListModel);
+            new CoursesCreateFrame(cs, ds, this::refreshListModel);
         });
 
         editBtn.addActionListener(e->{
@@ -126,9 +127,9 @@ public class DepartmentsViewFrame extends ViewFrame {
                 return;
             }
 
-            DepartmentModel m = list.getSelectedValue();
+            CourseModel m = list.getSelectedValue();
             
-            new DepartmentsEditFrame(ds, this::refreshListModel, list.getSelectedValue());
+            new CoursesEditFrame(cs, ds, this::refreshListModel, list.getSelectedValue());
         });
 
         deleteBtn.addActionListener(e->{
@@ -136,12 +137,12 @@ public class DepartmentsViewFrame extends ViewFrame {
                 return;
             }
 
-            DepartmentModel m = list.getSelectedValue();
+            CourseModel m = list.getSelectedValue();
 
             try {
-                ds.deleteDepartment(m.departmentId, cs, es, ts);
+                cs.deleteCourse(m.courseId, es, ts);
             } catch (Exception ex) {
-                System.err.println("Error: Couln't delete department");
+                System.err.println("Error: Couln't delete course");
             }
             refreshListModel();
         });
@@ -149,15 +150,15 @@ public class DepartmentsViewFrame extends ViewFrame {
     
     public void refreshListModel(){
         listModel.clear();
-        List<DepartmentModel> allDepartments = new ArrayList<DepartmentModel>();
+        List<CourseModel> allCourses = null;
         try {
-            allDepartments = ds.getAllDepartments();
+            allCourses = cs.getAllCourses();
         } catch (Exception e) {
-            System.err.println("Error: Departments couldn't be loaded");
+            System.err.println("Error: Courses couldn't be loaded");
         }
 
-        for (DepartmentModel department : allDepartments) {
-            listModel.addElement(department);
+        for (CourseModel course : allCourses) {
+            listModel.addElement(course);
         }
 
         this.repaint();
@@ -166,29 +167,29 @@ public class DepartmentsViewFrame extends ViewFrame {
 
     public void searchBtnClicked(){
         listModel.clear();
-        List<DepartmentModel> allDepartments = null;
+        List<CourseModel> allCourses = null;
         try {
-            allDepartments = ds.getDepartmentsWithName(searchPane.getText());
+            allCourses = cs.getCoursesWithName(searchPane.getText());
         } catch (Exception e) {
-            System.err.println("Error: Departments with particular name couldn't be loaded");
+            System.err.println("Error: Courses with particular name couldn't be loaded");
         }
 
-        for (DepartmentModel department : allDepartments) {
-            listModel.addElement(department);
+        for (CourseModel course : allCourses) {
+            listModel.addElement(course);
         }
 
         this.repaint();
         this.revalidate();
     }
-    public JList<DepartmentModel> createJList(DefaultListModel<DepartmentModel> model){
-        JList<DepartmentModel> list = new JList<>(model);
+    public JList<CourseModel> createJList(DefaultListModel<CourseModel> model){
+        JList<CourseModel> list = new JList<>(model);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         // Create and set the custom renderer
-        list.setCellRenderer(new ListCellRenderer<DepartmentModel>() {
+        list.setCellRenderer(new ListCellRenderer<CourseModel>() {
             @Override
-            public Component getListCellRendererComponent(JList<? extends DepartmentModel> list, DepartmentModel value, int index, boolean isSelected, boolean cellHasFocus) {
-                JLabel label = new JLabel(value.departmentName);
+            public Component getListCellRendererComponent(JList<? extends CourseModel> list, CourseModel value, int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel label = new JLabel(value.courseName);
                 if (isSelected) {
                     label.setBackground(list.getSelectionBackground());
                     label.setForeground(list.getSelectionForeground());

@@ -37,6 +37,35 @@ public class CoursesService extends DbService {
         }
     }
 
+    public List<CourseModel> getCoursesWithName(String name) throws SQLException{
+        if(name == null || name.isEmpty()){
+            return getAllCourses();
+        }
+
+        String query = "SELECT * FROM courses WHERE course_name LIKE '%'||?||'%'";
+        List<CourseModel> result = new ArrayList<>();
+
+        try (Connection connection = getConnection(); 
+            PreparedStatement statement = connection.prepareStatement(query);
+            ) {
+            statement.setString(1, name);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int courseId = resultSet.getInt("course_id");
+                String courseName = resultSet.getString("course_name");
+                String description = resultSet.getString("description");
+                int departmentId = resultSet.getInt("department_id");
+
+                result.add(new CourseModel(courseId, courseName, description, departmentId));
+            }
+            
+            return result;
+        }
+    }
+
+
     public void createCourse(String courseName, String description, int departmentId) throws SQLException {
         String query = "INSERT INTO courses (course_name, description, department_id) VALUES (?, ?, ?)";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
