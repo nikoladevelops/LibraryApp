@@ -26,20 +26,20 @@ public class MainFrame extends JFrame {
         this.setTitle(frameTitle);
         this.setSize(700, 500);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
         this.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 150));
         this.setResizable(false);
         this.dbInfo = dbInfo;
         this.tbs = new TableBuilderService(dbInfo);
-
-
+        
+        
         generateTitle();
         generateBtns();
         
         generateSpecialBtns();
-
+        
         this.pack();
         this.setLocationRelativeTo(null);
+        this.setVisible(true);
 
     }
 
@@ -102,14 +102,20 @@ public class MainFrame extends JFrame {
             Color.blue
         );
 
+        dropTablesBtn.addActionListener(e->{
+            tbs.dropAllTables();
+        });
+
+        ensureTablesCreatedBtn.addActionListener(e->{
+            tbs.ensureTablesCreated();
+        });
+
         ControlHelper.addHoverEffect(dropTablesBtn, Color.white, Color.black, Color.black, Color.white);
         ControlHelper.addHoverEffect(ensureTablesCreatedBtn, Color.white, Color.black, Color.black, Color.white);
 
         panel.add(dropTablesBtn);
         panel.add(ensureTablesCreatedBtn);
 
-        // todo click events
-        
         this.add(panel);
     }
 }
