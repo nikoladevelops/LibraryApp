@@ -11,7 +11,7 @@ public class ViewFrame extends JFrame {
     public ViewFrame(String frameTitle, DbInfo dbInfo){
        
         this.setTitle(frameTitle);
-        this.setSize(900, 500);
+        this.setSize(1000, 500);
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.setLayout(new FlowLayout());
         this.dbInfo = dbInfo;

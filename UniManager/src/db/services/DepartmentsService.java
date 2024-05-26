@@ -35,6 +35,32 @@ public class DepartmentsService extends DbService {
         }
     }
 
+    public List<DepartmentModel> getDepartmentsWithName(String name) throws SQLException{
+        if(name == null || name.isEmpty()){
+            return getAllDepartments();
+        }
+
+        String query = "SELECT * FROM departments WHERE department_name LIKE '%'||?||'%'";
+        List<DepartmentModel> result = new ArrayList<>();
+
+        try (Connection connection = getConnection(); 
+            PreparedStatement statement = connection.prepareStatement(query);
+            ) {
+            statement.setString(1, name);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int departmentId = resultSet.getInt("department_id");
+                String departmentName = resultSet.getString("department_name");
+
+                result.add(new DepartmentModel(departmentId, departmentName));
+            }
+            
+            return result;
+        }
+    }
+
     public void createDepartment(String departmentName) throws SQLException {
         String query = "INSERT INTO departments (department_name) VALUES (?)";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {

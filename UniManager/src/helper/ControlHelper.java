@@ -60,6 +60,21 @@ public class ControlHelper {
         return btn;
     }
 
+    public static JButton generateDefaultButton(
+        String btnText,
+        int width,
+        int height
+    ){
+    JButton btn = new JButton(btnText);
+    btn.setPreferredSize(new Dimension(width, height));
+    btn.setFont(new Font("Serif", Font.PLAIN, 17));
+    btn.setBackground(Color.WHITE);
+    btn.setForeground(Color.black);
+    btn.setBorder(BorderFactory.createLineBorder(Color.black));
+
+    return btn;
+}
+
     public static void editButtonStyle(
         JButton btn,
         Dimension btnSize,
