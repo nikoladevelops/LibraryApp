@@ -2,8 +2,6 @@ package frames;
 
 import db.utility.DbInfo;
 import java.awt.FlowLayout;
-import javafx.scene.paint.Color;
-
 import javax.swing.*;
 
 public class ViewFrame extends JFrame {

@@ -1,6 +1,5 @@
 import db.utility.DbInfo;
-import frames.students.StudentsViewFrame;
-import javax.swing.JFrame;
+import frames.MainFrame;
 
 public class App {
     private final static String URL = "jdbc:h2:~/test";
@@ -17,19 +16,7 @@ public class App {
         // tbs.ensureTablesCreated();
 
         
-        //MainFrame mf = new MainFrame("Uni Manager", dbInfo);\
-        
-        StudentsViewFrame sf = new StudentsViewFrame("Students", dbInfo);
-        sf.setVisible(true);
-        sf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // CoursesViewFrame cf = new CoursesViewFrame("Courses", dbInfo);
-        // cf.setVisible(true);
-        // cf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        
-        // DepartmentsViewFrame df = new DepartmentsViewFrame("Departments", dbInfo);
-        // df.setVisible(true);
-        // df.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        MainFrame mf = new MainFrame("Uni Manager", dbInfo);
+    
     }
 }

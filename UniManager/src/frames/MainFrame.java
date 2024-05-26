@@ -2,7 +2,8 @@ package frames;
 
 import db.services.TableBuilderService;
 import db.utility.DbInfo;
-import frames.professors.ProfessorsFrame;
+import frames.courses.CoursesViewFrame;
+import frames.departments.DepartmentsViewFrame;
 import frames.students.StudentsViewFrame;
 import helper.ControlHelper;
 import java.awt.BorderLayout;
@@ -48,9 +49,8 @@ public class MainFrame extends JFrame {
 
         Map<JButton, ViewFrame> map = new HashMap<>();
         map.put(new JButton("Students"), new StudentsViewFrame("Students",dbInfo));
-        map.put(new JButton("Courses"), new ViewFrame("Courses",dbInfo));
-        map.put(new JButton("Professors"), new ProfessorsFrame("Professors",dbInfo));
-        map.put(new JButton("Departments"), new StudentsViewFrame("Departments",dbInfo));
+        map.put(new JButton("Courses"), new CoursesViewFrame("Courses",dbInfo));
+        map.put(new JButton("Departments"), new DepartmentsViewFrame("Departments",dbInfo));
         
         for (Map.Entry<JButton, ViewFrame> entry : map.entrySet()) {
             JButton btn = entry.getKey();
@@ -93,8 +93,8 @@ public class MainFrame extends JFrame {
             Color.red
         );
 
-        JButton generateFakeDataBtn = ControlHelper.generateButton(
-            "Gen Fake Data",
+        JButton ensureTablesCreatedBtn = ControlHelper.generateButton(
+            "Ensure Created",
             new Dimension(30,40),
             15,
             Color.white,
@@ -103,10 +103,12 @@ public class MainFrame extends JFrame {
         );
 
         ControlHelper.addHoverEffect(dropTablesBtn, Color.white, Color.black, Color.black, Color.white);
-        ControlHelper.addHoverEffect(generateFakeDataBtn, Color.white, Color.black, Color.black, Color.white);
+        ControlHelper.addHoverEffect(ensureTablesCreatedBtn, Color.white, Color.black, Color.black, Color.white);
 
         panel.add(dropTablesBtn);
-        panel.add(generateFakeDataBtn);
+        panel.add(ensureTablesCreatedBtn);
+
+        // todo click events
         
         this.add(panel);
     }
