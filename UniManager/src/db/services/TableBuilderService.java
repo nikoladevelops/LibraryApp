@@ -29,9 +29,11 @@ public class TableBuilderService extends DbService {
      */
     private final String createStudentsTableQuery = "CREATE TABLE IF NOT EXISTS students ("
             + "student_id INT AUTO_INCREMENT, "
-            + "name VARCHAR(255), "
+            + "first_name VARCHAR(255), "
+            + "middle_name VARCHAR(255), "
+            + "last_name VARCHAR(255), "
             + "email VARCHAR(255), "
-            + "faculty_number VARCHAR(255)"
+            + "faculty_number VARCHAR(255),"
             + "PRIMARY KEY(student_id)"
             + ")";
 

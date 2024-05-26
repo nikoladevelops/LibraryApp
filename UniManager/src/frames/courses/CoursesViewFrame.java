@@ -42,7 +42,7 @@ public class CoursesViewFrame extends ViewFrame {
     private JTextPane searchPane;
 
     // Needed in order to clear and reset list items
-    private DefaultListModel<CourseModel> listModel;
+    private DefaultListModel<CourseModel> listModel = new DefaultListModel<>();
 
     // Needed in order to know which thing is selected
     private JList<CourseModel> list;

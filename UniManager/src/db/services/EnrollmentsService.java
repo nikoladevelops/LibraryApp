@@ -1,15 +1,44 @@
 package db.services;
 
+import db.models.CourseModel;
 import db.utility.DbInfo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EnrollmentsService extends DbService {
 
     public EnrollmentsService(DbInfo dbInfo) {
         super(dbInfo);
+    }
+
+    public List<CourseModel> getAllEnrollmentsOfStudent(int student_id) throws SQLException {
+        String query = 
+        "SELECT * "
+        + "FROM enrollments e " 
+        + "JOIN courses c ON e.course_id = c.course_id " 
+        + "WHERE e.student_id = ?";
+        List<CourseModel> result = new ArrayList<>();
+
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query);) {
+
+            statement.setInt(1, student_id);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int courseId = resultSet.getInt("course_id");
+                String courseName = resultSet.getString("course_name");
+                String description = resultSet.getString("description");
+                int departmentId = resultSet.getInt("department_id");
+
+                result.add(new CourseModel(courseId, courseName, description, departmentId));
+            }
+
+            return result;
+        }
     }
 
     public void createEnrollment(int studentId, int courseId, java.sql.Date enrollmentDate) throws SQLException {

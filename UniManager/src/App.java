@@ -1,5 +1,5 @@
 import db.utility.DbInfo;
-import frames.courses.CoursesViewFrame;
+import frames.students.StudentsViewFrame;
 import javax.swing.JFrame;
 
 public class App {
@@ -11,11 +11,25 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         dbInfo = new DbInfo(URL, USER, PASSWORD);
+
+        // TableBuilderService tbs = new TableBuilderService(dbInfo);
+        // tbs.dropAllTables();
+        // tbs.ensureTablesCreated();
+
         
-        //MainFrame mf = new MainFrame("Uni Manager", dbInfo);
-        CoursesViewFrame df = new CoursesViewFrame("Courses", dbInfo);
-        df.setVisible(true);
-        df.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //MainFrame mf = new MainFrame("Uni Manager", dbInfo);\
         
+        StudentsViewFrame sf = new StudentsViewFrame("Students", dbInfo);
+        sf.setVisible(true);
+        sf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // CoursesViewFrame cf = new CoursesViewFrame("Courses", dbInfo);
+        // cf.setVisible(true);
+        // cf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        
+        // DepartmentsViewFrame df = new DepartmentsViewFrame("Departments", dbInfo);
+        // df.setVisible(true);
+        // df.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }

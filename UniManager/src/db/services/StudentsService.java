@@ -1,10 +1,14 @@
 package db.services;
 
+import db.models.StudentModel;
 import db.utility.DbInfo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StudentsService extends DbService {
 
@@ -12,13 +16,45 @@ public class StudentsService extends DbService {
         super(dbInfo);
     }
 
-    public void createStudent(String name, String email, String facultyNumber) throws SQLException {
-        String query = "INSERT INTO students (name, email, facultyNumber) VALUES (?, ?, ?)";
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, name);
-            statement.setString(2, email);
-            statement.setString(3, facultyNumber);
+    public List<StudentModel> getAllStudents() throws SQLException {
+        String query = "SELECT * FROM students";
+        List<StudentModel> result = new ArrayList<>();
+
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                int studentId = resultSet.getInt("student_id");
+                String firstName = resultSet.getString("first_name");
+                String middleName = resultSet.getString("middle_name");
+                String lastName = resultSet.getString("last_name");
+                String email = resultSet.getString("email");
+                String facultyNumber = resultSet.getString("faculty_number");
+
+                result.add(new StudentModel(studentId, firstName, middleName, lastName, email, facultyNumber));
+            }
+
+            return result;
+        }
+    }
+
+    public int createStudent(String firstName, String middleName, String lastName, String email, String facultyNumber) throws SQLException {
+        String query = "INSERT INTO students (first_name, middle_name, last_name, email, faculty_number) VALUES (?, ?, ?, ?, ?)";
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
+            statement.setString(1, firstName);
+            statement.setString(2, middleName);
+            statement.setString(3, lastName);
+            statement.setString(4, email);
+            statement.setString(5, facultyNumber);
             statement.executeUpdate();
+
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1); // Return the generated ID
+                } else {
+                    throw new SQLException("Creating student failed, no ID obtained.");
+                }
+            }
         }
     }
 

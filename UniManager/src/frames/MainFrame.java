@@ -2,9 +2,8 @@ package frames;
 
 import db.services.TableBuilderService;
 import db.utility.DbInfo;
-import frames.departments.DepartmentsViewFrame;
 import frames.professors.ProfessorsFrame;
-import frames.students.StudentsFrame;
+import frames.students.StudentsViewFrame;
 import helper.ControlHelper;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -48,10 +47,10 @@ public class MainFrame extends JFrame {
         btnPanel.setLayout(new GridLayout(4,1,0,5));
 
         Map<JButton, ViewFrame> map = new HashMap<>();
-        map.put(new JButton("Students"), new StudentsFrame("Students",dbInfo));
+        map.put(new JButton("Students"), new StudentsViewFrame("Students",dbInfo));
         map.put(new JButton("Courses"), new ViewFrame("Courses",dbInfo));
         map.put(new JButton("Professors"), new ProfessorsFrame("Professors",dbInfo));
-        map.put(new JButton("Departments"), new CoursesViewFrame("Departments",dbInfo));
+        map.put(new JButton("Departments"), new StudentsViewFrame("Departments",dbInfo));
         
         for (Map.Entry<JButton, ViewFrame> entry : map.entrySet()) {
             JButton btn = entry.getKey();
