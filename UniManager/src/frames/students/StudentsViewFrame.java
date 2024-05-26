@@ -18,6 +18,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -56,6 +57,9 @@ public class StudentsViewFrame extends ViewFrame {
     private JList<StudentModel> studentsList;
 
     public StudentsViewFrame(String frameTitle, DbInfo dbInfo) {
+        
+        // TODO SEARCHING
+
         super(frameTitle, dbInfo);
         cs = new CoursesService(dbInfo);
         es = new EnrollmentsService(dbInfo);
@@ -109,32 +113,38 @@ public class StudentsViewFrame extends ViewFrame {
 
     private void addBtnEvenets(){
         createBtn.addActionListener(e->{
-            new StudentsCreateFrame(ss, cs, es, this::refreshCoursesListModel);
+            new StudentsCreateFrame(ss, cs, es, this::refreshAll);
         });
 
         editBtn.addActionListener(e->{
-            if(coursesList.getSelectedIndex() == -1){
+            if(studentsList.getSelectedIndex() == -1){
                 return;
             }
 
-            CourseModel m = coursesList.getSelectedValue();
+            StudentModel student = studentsList.getSelectedValue();
+
+            List<CourseModel> courses = new ArrayList<>(); 
+            for (int i = 0; i < coursesListModel.size(); i++) {
+                CourseModel m = coursesListModel.getElementAt(i);
+                courses.add(m);
+            }
             
-            //new StudentsEditFrame(cs, ds, this::refreshCoursesListModel, coursesList.getSelectedValue());
+            new StudentsEditFrame(ss,cs,es, this::refreshAll, student, courses);
         });
 
         deleteBtn.addActionListener(e->{
-            if(coursesList.getSelectedIndex() == -1){
+            if(studentsList.getSelectedIndex() == -1){
                 return;
             }
 
-            CourseModel m = coursesList.getSelectedValue();
-            // TODO
+            StudentModel m = studentsList.getSelectedValue();
+            
             try {
-                //cs.deleteCourse(m.courseId, es, ts);
+                ss.deleteStudent(m.studentId, es);
             } catch (Exception ex) {
-                System.err.println("Error: Couln't delete course");
+                System.err.println("Error: Couln't delete student");
             }
-            refreshCoursesListModel();
+            refreshAll();
         });
     }
 
@@ -335,6 +345,10 @@ public class StudentsViewFrame extends ViewFrame {
         return list;
     }
 
+    private void refreshAll(){
+        coursesListModel.clear();
+        refreshStudentsListModel();
+    }
     
 
     

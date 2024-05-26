@@ -78,4 +78,12 @@ public class EnrollmentsService extends DbService {
         }
     }
 
+    public void deleteEnrollmentOfStudent(int studentId) throws SQLException {
+        String query = "DELETE FROM enrollments WHERE student_id = ?";
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, studentId);
+            statement.executeUpdate();
+        }
+    }
+
 }

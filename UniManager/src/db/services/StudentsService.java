@@ -66,13 +66,15 @@ public class StudentsService extends DbService {
         return statement.executeQuery();
     }
 
-    public void updateStudent(int studentId, String name, String email, String facultyNumber) throws SQLException {
-        String query = "UPDATE students SET name = ?, email = ?, facultyNumber = ? WHERE student_id = ?";
+    public void updateStudent(int studentId, String firstName, String middleName, String lastName, String email, String facultyNumber) throws SQLException {
+        String query = "UPDATE students SET first_name = ?, middle_name = ?, last_name = ?, email = ?, faculty_number = ? WHERE student_id = ?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, name);
-            statement.setString(2, email);
-            statement.setString(3, facultyNumber);
-            statement.setInt(4, studentId);
+            statement.setString(1, firstName);
+            statement.setString(2, middleName);
+            statement.setString(3, lastName);
+            statement.setString(4, email);
+            statement.setString(5, facultyNumber);
+            statement.setInt(6, studentId);
             statement.executeUpdate();
         }
     }

@@ -38,13 +38,6 @@ public class StudentsCreateFrame extends CreateFrame {
         super("Create New Student");
         this.setLayout(new FlowLayout());
 
-
-        // TODO when you load, the courses panel is completely emppty
-        // TODO when you load, only the students panel is populated with students
-        // TODO when you select a student, refresh the courses panel, only with the courses that the student posses
-        // TODO when you click on Create New, ensure that the refresh function correctly refreshes all students and clears the courses one
-        // TODO when you edit, pass the data of the student and all the courses he attends, ensure that they are all selected in the courses panel
-        
         this.ss = ss;
         this.cs = cs;
         this.es = es;
